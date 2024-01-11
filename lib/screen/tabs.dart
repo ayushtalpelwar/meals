@@ -7,6 +7,13 @@ import 'package:meals/widget/main_drawer.dart';
 import '../models/meal.dart';
 import 'categories.dart';
 
+const kInitialFilters={
+  Filter.GlutenFree:false,
+  Filter.LactoseFree:false,
+  Filter.Vegan:false,
+  Filter.Vegeterian:false,
+};
+
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
 
@@ -17,6 +24,8 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   int selectedIndex = 0;
   final List<Meal> _favouriteMeals = [];
+
+  Map<Filter,bool> _selectedFilters=kInitialFilters;
 
   void showmeassege(message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -49,14 +58,16 @@ class _TabsScreenState extends State<TabsScreen> {
   void _setScreen(String id) async{
     Navigator.of(context).pop();
     if (id == 'filter') {
-      final result = await Navigator.of(context).pushReplacement(
+      final result = await Navigator.of(context).push<Map<Filter,bool>>(
         MaterialPageRoute(builder: (context) => FiltersScreen()),
       );
+      _selectedFilters=result ?? kInitialFilters;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+
     Widget activePage = CategoriesScreen(
       onToggleFavourite: _togglefavlist,
     );
