@@ -4,6 +4,7 @@ import 'package:meals/screen/filters.dart';
 import 'package:meals/screen/meals.dart';
 import 'package:meals/widget/main_drawer.dart';
 
+import '../data/dummy_data.dart';
 import '../models/meal.dart';
 import 'categories.dart';
 
@@ -59,17 +60,33 @@ class _TabsScreenState extends State<TabsScreen> {
     Navigator.of(context).pop();
     if (id == 'filter') {
       final result = await Navigator.of(context).push<Map<Filter,bool>>(
-        MaterialPageRoute(builder: (context) => FiltersScreen()),
+        MaterialPageRoute(builder: (context) => FiltersScreen(currentFilters: _selectedFilters,)),
       );
-      _selectedFilters=result ?? kInitialFilters;
+      setState(() {
+        _selectedFilters=result ?? kInitialFilters;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
+    final availableMeals = dummyMeals.where((meal) {
+      if (_selectedFilters[Filter.GlutenFree]! && !meal.isGlutenFree) {
+        return false;
+      }
+      if (_selectedFilters[Filter.LactoseFree]! && !meal.isLactoseFree) {
+        return false;
+      }
+      if (_selectedFilters[Filter.Vegeterian]! && !meal.isVegetarian) {
+        return false;
+      }
+      if (_selectedFilters[Filter.Vegan]! && !meal.isVegan) {
+        return false;
+      }
+      return true;
+    }).toList();
     Widget activePage = CategoriesScreen(
-      onToggleFavourite: _togglefavlist,
+      onToggleFavourite: _togglefavlist, availableMeals: availableMeals,
     );
     var activePageTitle = 'Categories';
     if (selectedIndex == 1) {

@@ -6,7 +6,8 @@ import 'package:meals/widget/main_drawer.dart';
 enum Filter { GlutenFree, LactoseFree, Vegeterian, Vegan }
 
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({super.key});
+  const FiltersScreen({super.key, required this.currentFilters});
+  final Map<Filter,bool> currentFilters;
   @override
   State<FiltersScreen> createState() {
     return _FiltersScreenState();
@@ -18,16 +19,26 @@ class _FiltersScreenState extends State<FiltersScreen> {
   var _lactosefreefilterset = false;
   var _vegeterianfilterset = false;
   var _veganfilterset = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _glutenfreefilterset = widget.currentFilters[Filter.GlutenFree]!;
+    _lactosefreefilterset = widget.currentFilters[Filter.LactoseFree]!;
+    _vegeterianfilterset = widget.currentFilters[Filter.Vegeterian]!;
+    _veganfilterset = widget.currentFilters[Filter.Vegan]!;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
       ),
-      drawer: MainDrawer(onSelectDrawer: (id) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => TabsScreen()));
-      }),
+      // drawer: MainDrawer(onSelectDrawer: (id) {
+      //   Navigator.of(context).pushReplacement(
+      //       MaterialPageRoute(builder: (context) => TabsScreen()));
+      // }),
       body: WillPopScope(
         onWillPop: () async {
           Navigator.of(context).pop({
