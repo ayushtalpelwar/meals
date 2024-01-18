@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:meals/data/dummy_data.dart';
-import 'package:meals/screen/categories.dart';
-import 'package:meals/screen/meals.dart';
 import 'package:meals/screen/tabs.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final theme=ThemeData(
-  useMaterial3: true,
-  textTheme: GoogleFonts.latoTextTheme(),
-  colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.dark,
-    seedColor: const Color.fromARGB(255, 131, 57, 0),
-    )
-);
-
-
+final theme = ThemeData(
+    useMaterial3: true,
+    textTheme: GoogleFonts.latoTextTheme(),
+    colorScheme: ColorScheme.fromSeed(
+      brightness: Brightness.dark,
+      seedColor: const Color.fromARGB(255, 131, 57, 0),
+    ));
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,7 +27,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home:TabsScreen(),
+      home: TabsScreen(),
     );
+
   }
 }
